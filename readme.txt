@@ -1,2 +1,2 @@
 nini is a lovable thing!
-Little bug almighty!
+Little but almighty!
