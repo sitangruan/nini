@@ -1,3 +1,3 @@
 nini is a lovable thing!
 Little but almighty!
-Now it is dev branch.
+In master we add sth in the same time.
