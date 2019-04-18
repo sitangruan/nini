@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.WindowsServices;
@@ -44,6 +45,7 @@ namespace nini
             var host = new WebHostBuilder()
                 .UseIISIntegration()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureServices(services => services.AddAutofac())
                 .UseKestrel(options =>
                 {
                     options.Listen(IPAddress.Loopback, port, x =>

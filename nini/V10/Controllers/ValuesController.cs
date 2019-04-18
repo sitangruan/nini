@@ -2,28 +2,38 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using nini.core.V10;
 
 namespace nini.V10.Controllers
 {
-    //[Produces("application/json")]
+    [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     //[ApiExplorerSettings(GroupName = "FirstLevel")]
     public class ValuesController : ControllerBase
     {
+        private readonly IValuesManager _valuesManager;
+
+        public ValuesController(IValuesManager manager)
+        {
+            _valuesManager = manager;
+        }
+        
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] {"value1", "value2"};
+            var result = _valuesManager.GetValues();
+            return result;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            var result = _valuesManager.GetValue(id);
+            return result;
         }
 
         // POST api/values
@@ -31,8 +41,6 @@ namespace nini.V10.Controllers
         public void Post([FromBody] string value)
         {
         }
-
-
 
         // PUT api/values/5
         [HttpPut("{id}")]
