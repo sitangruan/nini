@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using nini.core.V10;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace nini.V10.Controllers
 {
@@ -38,20 +40,25 @@ namespace nini.V10.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public OkResult Post([FromBody] string value)
         {
+            return Ok();
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [SwaggerResponse((int)HttpStatusCode.NoContent)]
+        public NoContentResult Put(int id, [FromBody] string value)
         {
+            return NoContent();
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [SwaggerResponse((int)HttpStatusCode.NoContent)]
+        public NoContentResult Delete(int id)
         {
+            return NoContent();
         }
     }
 }
