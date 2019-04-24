@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Autofac;
+﻿using Autofac;
 
 namespace nini.core
 {
@@ -10,6 +7,12 @@ namespace nini.core
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
+
+            builder.RegisterType<dal.V10.ValuesProvider>()
+                .As<dal.V10.IValuesProvider>()
+                .SingleInstance()
+                .ExternallyOwned()
+                .IfNotRegistered(typeof(dal.V10.ValuesProvider));
 
             builder.RegisterType<V10.ValuesManager>()
                 .As<V10.IValuesManager>()
