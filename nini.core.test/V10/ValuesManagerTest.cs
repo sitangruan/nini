@@ -62,7 +62,7 @@ namespace nini.core.test
         public void GetValueTestWithMock(int id)
         {
             var mock = new Mock<IValuesProvider>();
-            mock.Setup(m => m.ReadValue(id)).Returns($"Value {id} from DAL mock");
+            mock.Setup(m => m.ReadValue(It.IsAny<int>())).Returns($"Value {id} from DAL mock");
 
             IValuesManager manager = new ValuesManager(mock.Object);
             string value = manager.GetValue(id);
