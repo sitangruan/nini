@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using nini.core.Common.Session;
 
 namespace nini.core
 {
@@ -7,6 +8,12 @@ namespace nini.core
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
+
+            builder.RegisterType<SessionManager>()
+                .As<ISessionManager>()
+                .SingleInstance()
+                .ExternallyOwned()
+                .IfNotRegistered(typeof(SessionManager));
 
             builder.RegisterType<dal.V10.ValuesProvider>()
                 .As<dal.V10.IValuesProvider>()
