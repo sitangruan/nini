@@ -9,6 +9,12 @@ namespace nini.core
         {
             base.Load(builder);
 
+            builder.RegisterType<SessionFactory>()
+                .As<ISessionFactory>()
+                .SingleInstance()
+                .ExternallyOwned()
+                .IfNotRegistered(typeof(SessionFactory));
+
             builder.RegisterType<SessionManager>()
                 .As<ISessionManager>()
                 .SingleInstance()
@@ -26,6 +32,18 @@ namespace nini.core
                 .SingleInstance()
                 .ExternallyOwned()
                 .IfNotRegistered(typeof(V10.ValuesManager));
+
+            builder.RegisterType<dal.V10.LoginProvider>()
+                .As<dal.V10.ILoginProvider>()
+                .SingleInstance()
+                .ExternallyOwned()
+                .IfNotRegistered(typeof(dal.V10.LoginProvider));
+
+            builder.RegisterType<V10.LoginManager>()
+                .As<V10.ILoginManager>()
+                .SingleInstance()
+                .ExternallyOwned()
+                .IfNotRegistered(typeof(V10.LoginManager));
         }
     }
 }

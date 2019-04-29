@@ -8,10 +8,12 @@ namespace nini.core.Common.Session
     {
         private ISessionFactory _sessionFactory;
         private Dictionary<Guid, ISession> _sessionDictionary;
+        private const int MAX_SESSION_NUMBER = 300;
 
         public SessionManager(ISessionFactory sessionFactory)
         {
             _sessionFactory = sessionFactory;
+            _sessionDictionary = new Dictionary<Guid, ISession>(MAX_SESSION_NUMBER);
         }
 
         public ISession CreateSession(Guid Id, string userName)
