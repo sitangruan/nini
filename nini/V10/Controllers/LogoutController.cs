@@ -12,27 +12,21 @@ namespace nini.V10.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class LogoutController : ControllerBase
     {
         private readonly ILoginManager _loginManager;
 
-        public LoginController(ILoginManager manager)
+        public LogoutController(ILoginManager manager)
         {
             _loginManager = manager;
         }
 
         [HttpPost]
-        public Guid DoLogin([FromBody] UserCredential credential)
+        public NoContentResult Logout(Guid sessionId)
         {
-            Guid sessionId = _loginManager.DoLogin(credential.userName, credential.password);
+            _loginManager.Logout(sessionId);
 
-            return sessionId;
+            return NoContent();
         }
-    }
-
-    public class UserCredential
-    {
-        public string userName { get; set; }
-        public string password { get; set; }
     }
 }
