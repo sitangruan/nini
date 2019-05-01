@@ -9,5 +9,7 @@ namespace nini.core.V10
         Guid DoLogin(string userName, string password);
 
         bool Logout(Guid sessionId);
+
+        void KeepLive(Guid sessionId);
     }
 }

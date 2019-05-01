@@ -8,11 +8,11 @@ namespace nini.V10.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    public class LogoutController : ControllerBase
+    public class KeepLiveController : ControllerBase
     {
         private readonly ILoginManager _loginManager;
 
-        public LogoutController(ILoginManager manager)
+        public KeepLiveController(ILoginManager manager)
         {
             _loginManager = manager;
         }

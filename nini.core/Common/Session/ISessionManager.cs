@@ -11,5 +11,7 @@ namespace nini.core.Common.Session
         bool RemoveSession(Guid sessionId);
 
         ISession GetSession(Guid sessionId);
+
+        bool KeepSessionLive(Guid sessionId);
     }
 }

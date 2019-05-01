@@ -18,5 +18,15 @@ namespace nini.core.Common.Session
             UserName = userName;
             LastTouchTime = DateTime.UtcNow;
         }
+
+        public void KeepMeLive()
+        {
+            LastTouchTime = DateTime.UtcNow;
+        }
+
+        public void Dispose()
+        {
+            //To do: release the resource belongs to this session. Like DB client or sth.
+        }
     }
 }

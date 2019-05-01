@@ -36,5 +36,10 @@ namespace nini.core.V10
 
             return success;
         }
+
+        public void KeepLive(Guid sessionId)
+        {
+            SessionManager.RemoveSession(sessionId);
+        }
     }
 }
