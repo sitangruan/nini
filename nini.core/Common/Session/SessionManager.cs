@@ -33,32 +33,91 @@ namespace nini.core.Common.Session
 
         public ISession CreateSession(Guid Id, string userName)
         {
-            var session = _sessionFactory.CreateSession(Id, userName);
-            _sessionDictionary[session.Id] = session;
+            bool writerGranted = false;
+            try
+            {
+                writerGranted = _sessionDictionaryLock.TryEnterWriteLock(_lockAcquireTimout);
 
-            return session;
+                if (writerGranted)
+                {
+                    var session = _sessionFactory.CreateSession(Id, userName);
+                    _sessionDictionary[session.Id] = session;
+
+                    return session;
+                }
+                else
+                {
+                    //To do, we should throw an error here after we implement exception handling
+                    return null;
+                }
+            }
+            finally
+            {
+                if (writerGranted)
+                {
+                    _sessionDictionaryLock.ExitWriteLock();
+                }
+            }
         }
 
         public bool RemoveSession(Guid sessionId)
         {
-            if (_sessionDictionary.ContainsKey(sessionId))
+            bool writerGranted = false;
+            try
             {
-                _sessionDictionary.Remove(sessionId);
+                writerGranted = _sessionDictionaryLock.TryEnterWriteLock(_lockAcquireTimout);
 
-                return true;
+                if (writerGranted && _sessionDictionary.ContainsKey(sessionId))
+                {
+                    _sessionDictionary.Remove(sessionId);
+                    return true;
+                }
+                else
+                {
+                    //To do, we should throw an error here after we implement exception handling
+                    return false;
+                }
             }
-
-            return false;
+            finally
+            {
+                if (writerGranted)
+                {
+                    _sessionDictionaryLock.ExitWriteLock();
+                }
+            }
         }
 
         public ISession GetSession(Guid sessionId)
         {
-            if (_sessionDictionary.ContainsKey(sessionId))
-            {
-                return _sessionDictionary[sessionId];
-            }
+            bool readerGranted = false;
 
-            return null;
+            try
+            {
+                readerGranted = _sessionDictionaryLock.TryEnterReadLock(_lockAcquireTimout);
+                if (readerGranted)
+                {
+                    if (_sessionDictionary.ContainsKey(sessionId))
+                    {
+                        return _sessionDictionary[sessionId];
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    //To do: we should throw an error here once we have the exception handling ready.
+                    return null;
+                }
+            }
+            finally
+            {
+                if (readerGranted)
+                {
+                    _sessionDictionaryLock.ExitReadLock();
+                }
+            }
         }
 
         public bool KeepSessionLive(Guid sessionId)

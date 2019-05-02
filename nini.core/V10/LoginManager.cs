@@ -23,8 +23,9 @@ namespace nini.core.V10
             if (isValid)
             {
                 var sessionId = Guid.NewGuid();
-                SessionManager.CreateSession(sessionId, userName);
-                return sessionId;
+                var session = SessionManager.CreateSession(sessionId, userName);
+
+                return session?.Id ?? Guid.Empty;
             }
 
             return Guid.Empty;
