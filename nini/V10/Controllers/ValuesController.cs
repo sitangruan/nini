@@ -3,6 +3,8 @@ using nini.core.V10;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Net;
+using Microsoft.Extensions.Logging;
+using nini.Common;
 
 namespace nini.V10.Controllers
 {
@@ -11,11 +13,11 @@ namespace nini.V10.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     //[ApiExplorerSettings(GroupName = "FirstLevel")]
-    public class ValuesController : ControllerBase
+    public class ValuesController : BaseController<ValuesController>
     {
         private readonly IValuesManager _valuesManager;
 
-        public ValuesController(IValuesManager manager)
+        public ValuesController(ILogger<ValuesController> logger, IValuesManager manager) : base(logger)
         {
             _valuesManager = manager;
         }
@@ -24,6 +26,7 @@ namespace nini.V10.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            Logger.LogDebug("GET Values is called");
             var result = _valuesManager.GetValues();
             return result;
         }

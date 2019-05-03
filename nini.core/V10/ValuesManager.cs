@@ -13,7 +13,7 @@ namespace nini.core.V10
 
         public ValuesManager(IValuesProvider valuesProvider)
         {
-            mConstructionIfno = "This manager is instantiated by system, probably by Dependency Injection framework.";
+            mConstructionIfno = "This manager is instantiated by system, by Dependency Injection!";
             _valuesProvider = valuesProvider;
         }
 

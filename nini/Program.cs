@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting.WindowsServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using nini.core.Helpers;
+using NLog.Web;
 
 namespace nini
 {
@@ -20,18 +21,36 @@ namespace nini
         private const int DefaultPortNumber = 7500;
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args);
+            //Setup the logger first
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
-            var isService = !Debugger.IsAttached;
+            try
+            {
+                logger.Info("Main function starts");
+                var host = CreateWebHostBuilder(args);
+                var isService = !Debugger.IsAttached;
 
-            if (isService)
-            {
-                host.RunAsService();
+                if (isService)
+                {
+                    logger.Info("Host running as a Windows service.");
+                    host.RunAsService();
+                }
+                else
+                {
+                    logger.Info("Host running in normal mode.");
+                    host.Run();
+                }
             }
-            else
+            catch (Exception e)
             {
-                host.Run();
+                logger.Error(e, "Stopped program due to unknown exception");
             }
+            finally
+            {
+                //Ensure to shut down the logger.
+                NLog.LogManager.Shutdown();
+            }
+            
         }
 
         public static IWebHost CreateWebHostBuilder(string[] args)
@@ -55,6 +74,12 @@ namespace nini
                 })
                 .UseUrls(niniUrls)
                 .UseStartup<Startup>()
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                })
+                .UseNLog()  // NLog: setup NLog for Dependency injection
                 .Build();
 
             return host;
