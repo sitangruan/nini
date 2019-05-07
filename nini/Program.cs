@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Hosting.WindowsServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using nini.core.Helpers;
+using nini.foundation.Logging;
 using NLog.Web;
 
 namespace nini
@@ -19,31 +21,38 @@ namespace nini
     public class Program
     {
         private const int DefaultPortNumber = 7500;
+        private const string NlogConfigFile = "nlog.config";
+        private static IMarvelLogger _mlogger;
+
         public static void Main(string[] args)
         {
-            //Setup the logger first
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var rootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            MarvelLoggerFactory.AssignConfiguration(Path.Combine(rootPath, NlogConfigFile));
+            _mlogger = MarvelLoggerFactory.Generate(typeof(Program));
+
+            //Or you can directly use original Nlog logger
+            //var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
             try
             {
-                logger.Info("Main function starts");
+                _mlogger.LogInfo("Main function starts");
                 var host = CreateWebHostBuilder(args);
                 var isService = !Debugger.IsAttached;
 
                 if (isService)
                 {
-                    logger.Info("Host running as a Windows service.");
+                    _mlogger.LogInfo("Host running as a Windows service.");
                     host.RunAsService();
                 }
                 else
                 {
-                    logger.Info("Host running in normal mode.");
+                    _mlogger.LogInfo("Host running in normal mode.");
                     host.Run();
                 }
             }
             catch (Exception e)
             {
-                logger.Error(e, "Stopped program due to unknown exception");
+                _mlogger.LogError("Stopped program due to unknown exception");
             }
             finally
             {

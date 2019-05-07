@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\nini.core.dal\nini.core.dal.csproj" />
+    <ProjectReference Include="..\nini.foundation\nini.foundation.csproj" />
   </ItemGroup>
 
   <ItemGroup>

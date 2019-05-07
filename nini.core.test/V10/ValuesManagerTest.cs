@@ -1,6 +1,7 @@
 using System;
 using Autofac;
 using Moq;
+using nini.core.Common.Session;
 using nini.core.dal.V10;
 using nini.core.V10;
 using Xunit;
@@ -29,14 +30,20 @@ namespace nini.core.test
         [Fact]
         public void GetValuesTestWithMock()
         {
-            var mock = new Mock<IValuesProvider>();
-            mock.Setup(m => m.ReadValues()).Returns(new string[] {"Value 1 from DAL mock", "Value 2 from DAL mock"});
+            ContainerBuilder builder = TestHelper.CreateBuilderWithDefaultModules();
+            IContainer container = builder.Build();
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var mock = new Mock<IValuesProvider>();
+                mock.Setup(m => m.ReadValues()).Returns(new string[] { "Value 1 from DAL mock", "Value 2 from DAL mock" });
+                var sessionManager = scope.Resolve<ISessionManager>();
 
-            IValuesManager manager = new ValuesManager(mock.Object);
-            string[] values = manager.GetValues();
+                IValuesManager manager = new ValuesManager(mock.Object, sessionManager);
+                string[] values = manager.GetValues();
 
-            Assert.Equal("Value 1 from DAL mock", values[0]);
-            Assert.Equal("Value 2 from DAL mock", values[1]);
+                Assert.Equal("Value 1 from DAL mock", values[0]);
+                Assert.Equal("Value 2 from DAL mock", values[1]);
+            }
         }
 
         [Theory]
@@ -61,13 +68,19 @@ namespace nini.core.test
         [InlineData(15)]
         public void GetValueTestWithMock(int id)
         {
-            var mock = new Mock<IValuesProvider>();
-            mock.Setup(m => m.ReadValue(It.IsAny<int>())).Returns($"Value {id} from DAL mock");
+            ContainerBuilder builder = TestHelper.CreateBuilderWithDefaultModules();
+            IContainer container = builder.Build();
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var mock = new Mock<IValuesProvider>();
+                mock.Setup(m => m.ReadValue(It.IsAny<int>())).Returns($"Value {id} from DAL mock");
+                var sessionManager = scope.Resolve<ISessionManager>();
 
-            IValuesManager manager = new ValuesManager(mock.Object);
-            string value = manager.GetValue(id);
+                IValuesManager manager = new ValuesManager(mock.Object, sessionManager);
+                string value = manager.GetValue(id);
 
-            Assert.Equal(value, $"Value {id} from DAL mock");
+                Assert.Equal(value, $"Value {id} from DAL mock");
+            }
         }
     }
 }

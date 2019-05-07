@@ -6,7 +6,7 @@ namespace nini.core.dal.V10
     {
         public string[] ReadValues()
         {
-            string[] values =  new string[] { "Values 1 from DAL", "Value 2 from DAL"};
+            string[] values =  new string[] { "Value 1 from DAL", "Value 2 from DAL"};
             return values;
         }
 

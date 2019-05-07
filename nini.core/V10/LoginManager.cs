@@ -7,7 +7,7 @@ using nini.core.dal.V10;
 
 namespace nini.core.V10
 {
-    public class LoginManager: BaseManager, ILoginManager
+    public class LoginManager: BaseManager<LoginManager>, ILoginManager
     {
         private readonly ILoginProvider _loginProvider;
 
@@ -18,6 +18,7 @@ namespace nini.core.V10
 
         public Guid DoLogin(string userName, string password)
         {
+            mLogger.LogDebug($"Username {userName} calls Login.");
             var isValid = _loginProvider.ValidateUserCredential(userName, password);
 
             if (isValid)
@@ -33,6 +34,7 @@ namespace nini.core.V10
 
         public bool Logout(Guid sessionId)
         {
+            mLogger.LogDebug($"sessionId {sessionId} calls Logout.");
             var success = SessionManager.RemoveSession(sessionId);
 
             return success;
@@ -40,7 +42,8 @@ namespace nini.core.V10
 
         public void KeepLive(Guid sessionId)
         {
-            SessionManager.RemoveSession(sessionId);
+            mLogger.LogDebug($"sessionId {sessionId} calls KeepLive.");
+            SessionManager.KeepSessionLive(sessionId);
         }
     }
 }
