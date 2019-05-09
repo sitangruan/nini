@@ -12,3 +12,4 @@ It is little but it is almighty! It contains these features:
 6. XUnit test with Moq
 7. User session management
 8. Deployed as a self hosted Windows service.
+9. Inheritable controller classes to support multi version
