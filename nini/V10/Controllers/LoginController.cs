@@ -3,6 +3,7 @@ using nini.core.V10;
 using System;
 using Microsoft.Extensions.Logging;
 using nini.Common;
+using System.ComponentModel;
 
 namespace nini.V10.Controllers
 {
@@ -10,6 +11,7 @@ namespace nini.V10.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "Login/Logout/KeepLive")]
     public class LoginController : BaseController<LoginController>
     {
         private readonly ILoginManager _loginManager;
@@ -20,6 +22,7 @@ namespace nini.V10.Controllers
         }
 
         [HttpPost]
+        [Description("Login")]
         public Guid DoLogin([FromBody] UserCredential credential)
         {
             Logger.LogDebug($"User '{credential.userName}' tries to login.");

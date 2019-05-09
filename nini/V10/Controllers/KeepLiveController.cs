@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using nini.core.V10;
 using System;
+using System.ComponentModel;
 using Microsoft.Extensions.Logging;
 using nini.Common;
 
@@ -10,6 +11,7 @@ namespace nini.V10.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "Login/Logout/KeepLive")]
     public class KeepLiveController : BaseController<KeepLiveController>
     {
         private readonly ILoginManager _loginManager;
@@ -20,7 +22,8 @@ namespace nini.V10.Controllers
         }
 
         [HttpPost]
-        public NoContentResult KeepLive(Guid sessionId)
+        [Description("Keep session alive")]
+        public NoContentResult KeepLive([Description("Session Id")] Guid sessionId)
         {
             Logger.LogDebug($"Session Id '{sessionId}' calls KeepLive.");
             _loginManager.KeepLive(sessionId);

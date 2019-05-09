@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using nini.core;
+using nini.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace nini
@@ -70,8 +71,10 @@ namespace nini
                     options.IgnoreObsoleteProperties();
                     options.DescribeAllParametersInCamelCase();
 
-                    //options.OperationFilter<>
+                    options.OperationFilter<TagByApiExplorerSettingsOperationFilter>();
                 }
+
+                
             });
         }
 
