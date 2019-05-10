@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using nini.core.Common;
+using nini.core.Common.ErrorHandling;
 using nini.core.Common.Session;
 using nini.core.dal.V10;
 
@@ -28,8 +29,10 @@ namespace nini.core.V10
 
                 return session?.Id ?? Guid.Empty;
             }
-
-            return Guid.Empty;
+            else
+            {
+                throw new MarvelException(System.Net.HttpStatusCode.BadRequest, "The login user credential is invalid.", null);
+            }
         }
 
         public bool Logout(Guid sessionId)

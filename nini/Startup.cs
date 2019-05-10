@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using nini.core;
 using nini.Filters;
+using nini.Middleware;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace nini
@@ -109,6 +103,8 @@ namespace nini
                         description.GroupName.ToUpperInvariant());
                 }
             });
+
+            app.UseMiddleware(typeof(MarvelErrorHandlingMiddleware));
 
             app.UseMvc();
         }

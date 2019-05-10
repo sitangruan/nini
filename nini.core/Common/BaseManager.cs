@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using nini.core.Common.Session;
+﻿using nini.core.Common.Session;
 using nini.foundation.Logging;
 
 namespace nini.core.Common
