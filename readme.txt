@@ -11,5 +11,6 @@ It is little but it is almighty! It contains these features:
 5. Https supported with self signed certificate
 6. XUnit test with Moq
 7. User session management
-8. Deployed as a self hosted Windows service.
+8. Deployed as a self hosted Windows service. Default port number 7500.
 9. Dedicated exception type and usage of error handling middleware.
+10. Web socket support! After deployment, use "https://localhost:7500/socketDemo.html" page to test.

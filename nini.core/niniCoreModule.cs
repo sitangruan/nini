@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using nini.core.Common.Session;
+using nini.core.Common.WebSockets;
 
 namespace nini.core
 {
@@ -20,6 +21,12 @@ namespace nini.core
                 .SingleInstance()
                 .ExternallyOwned()
                 .IfNotRegistered(typeof(SessionManager));
+
+            builder.RegisterType<MarvelWebSocketManager>()
+                .As<IMarvelWebSocketManager>()
+                .SingleInstance()
+                .ExternallyOwned()
+                .IfNotRegistered(typeof(MarvelWebSocketManager));
 
             builder.RegisterType<dal.V10.ValuesProvider>()
                 .As<dal.V10.IValuesProvider>()

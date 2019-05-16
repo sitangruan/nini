@@ -9,6 +9,9 @@ using nini.core;
 using nini.Filters;
 using nini.Middleware;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using Microsoft.AspNetCore.StaticFiles;
+using nini.core.Common.WebSockets;
 
 namespace nini
 {
@@ -78,7 +81,7 @@ namespace nini
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider, IMarvelWebSocketManager mWebSocketManager)
         {
             if (env.IsDevelopment())
             {
@@ -90,6 +93,13 @@ namespace nini
             }
 
             //app.UseHttpsRedirection();
+
+            var contentProvider = new FileExtensionContentTypeProvider();
+            contentProvider.Mappings.Add(".exe", "application/vnd.microsoft.portable-executable"); //file ext, ContentType
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = contentProvider
+            });
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
@@ -107,6 +117,15 @@ namespace nini
             app.UseMiddleware(typeof(MarvelErrorHandlingMiddleware));
 
             app.UseMvc();
+
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                ReceiveBufferSize = 4 * 1024
+            };
+
+            app.UseWebSockets(webSocketOptions);
+            app.Map("/ws", ab => ab.UseMiddleware<MarvelWebSocketMiddleware>(mWebSocketManager));
         }
     }
 }
