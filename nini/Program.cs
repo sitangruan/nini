@@ -23,10 +23,11 @@ namespace nini
         private const int DefaultPortNumber = 7500;
         private const string NlogConfigFile = "nlog.config";
         private static IMarvelLogger _mlogger;
+        private static string rootPath;
 
         public static void Main(string[] args)
         {
-            var rootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            rootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             MarvelLoggerFactory.AssignConfiguration(Path.Combine(rootPath, NlogConfigFile));
             _mlogger = MarvelLoggerFactory.Generate(typeof(Program));
 
@@ -67,8 +68,6 @@ namespace nini
             (int port, string url) cfg = GetNiniUrlFromConfig();
             var port = cfg.port;
             var niniUrls = Debugger.IsAttached ? string.Empty : cfg.url;
-
-            var rootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             CertificateHelper.CreateCertificate(out string certificateName, out string pwd);
 
