@@ -68,11 +68,15 @@ namespace nini
             var port = cfg.port;
             var niniUrls = Debugger.IsAttached ? string.Empty : cfg.url;
 
+            var rootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             CertificateHelper.CreateCertificate(out string certificateName, out string pwd);
 
             var host = new WebHostBuilder()
                 .UseIISIntegration()
-                .UseContentRoot(Directory.GetCurrentDirectory())
+                //.UseContentRoot(Directory.GetCurrentDirectory())
+                .UseContentRoot(rootPath)
+                .UseApplicationInsights()
                 .ConfigureServices(services => services.AddAutofac())
                 .UseKestrel(options =>
                 {
