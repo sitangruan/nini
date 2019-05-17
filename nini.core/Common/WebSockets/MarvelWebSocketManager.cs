@@ -76,6 +76,14 @@ namespace nini.core.Common.WebSockets
             {
                 mLogger.LogError("Exception happened in OnDataReceived in web socket. Detail: " + ex.Message);
             }
+
+            await OnDisconnected(socket);
+        }
+
+        public async Task OnDisconnected(WebSocket socket)
+        {
+            var socketId = GetSocketId(socket);
+            await RemoveSocket(socketId);
         }
 
         public void Send(WebSocket socket, string data)
