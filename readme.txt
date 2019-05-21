@@ -14,3 +14,4 @@ It is little but it is almighty! It contains these features:
 8. Deployed as a self hosted Windows service. Default port number 7500.
 9. Dedicated exception type and usage of error handling middleware.
 10. Web socket support! After deployment, use "https://localhost:7500/socketDemo.html" page to test.
+11. Supported to deploy in Azure.
