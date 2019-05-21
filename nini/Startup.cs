@@ -10,6 +10,7 @@ using nini.Filters;
 using nini.Middleware;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.StaticFiles;
 using nini.core.Common.WebSockets;
 
@@ -115,6 +116,10 @@ namespace nini
             });
 
             app.UseMiddleware(typeof(MarvelErrorHandlingMiddleware));
+
+            var rwOption = new RewriteOptions();
+            rwOption.AddRedirect("^$", "swagger/index.html");
+            app.UseRewriter(rwOption);
 
             app.UseMvc();
 

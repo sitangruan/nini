@@ -1,0 +1,27 @@
+#bin folder, obj folder, publish folder#
+############################
+
+.vs/
+
+nini.core.dal/bin
+nini.core.dal/obj
+
+nini.core.test/bin
+nini.core.test/obj
+
+nini.core/bin
+nini.core/obj
+
+nini.foundation/bin
+nini.foundation/obj
+
+nini/bin
+nini/obj
+nini/publish
+
+#other files#
+#############
+nini.sln.DotSettings.user
+nini/Properties/PublishProfiles/nini - Web Deploy.pubxml
+nini/Properties/PublishProfiles/nini - Web Deploy.pubxml.user
+nini/nini - Copy (2).csproj

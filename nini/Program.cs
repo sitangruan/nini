@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Threading.Tasks;
-using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore;
+﻿using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.WindowsServices;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +6,11 @@ using Microsoft.Extensions.Logging;
 using nini.core.Helpers;
 using nini.foundation.Logging;
 using NLog.Web;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Reflection;
 
 namespace nini
 {
@@ -60,7 +56,7 @@ namespace nini
                 //Ensure to shut down the logger.
                 NLog.LogManager.Shutdown();
             }
-            
+
         }
 
         public static IWebHost CreateWebHostBuilder(string[] args)
@@ -118,3 +114,52 @@ namespace nini
         }
     }
 }
+
+
+
+
+
+//Below are the codes dedicated for Azure deployment. They are only uncommented and used when being deployed to Azure.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//using Autofac.Extensions.DependencyInjection;
+//using Microsoft.AspNetCore.Hosting;
+//using Microsoft.Extensions.Logging;
+//using NLog.Web;
+//using System.IO;
+//using System.Reflection;
+
+//namespace nini
+//{
+//    public class Program
+//    {
+//        private static string rootPath;
+
+//        public static void Main(string[] args)
+//        {
+//            rootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+//            var host = CreateWebHostBuilder(args);
+//            host.Run();
+//        }
+
+//        public static IWebHost CreateWebHostBuilder(string[] args)
+//        {
+//            var host = new WebHostBuilder()
+//                .UseIISIntegration()
+//                .UseContentRoot(rootPath)
+//                .UseApplicationInsights()
+//                .ConfigureServices(services => services.AddAutofac())
+//                .UseStartup<Startup>()
+//                .UseKestrel()
+//                .ConfigureLogging(logging =>
+//                {
+//                    logging.ClearProviders();
+//                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+//                })
+//                .UseNLog()  // NLog: setup NLog for Dependency injection
+//                .Build();
+
+//            return host;
+//        }
+//    }
+//}
